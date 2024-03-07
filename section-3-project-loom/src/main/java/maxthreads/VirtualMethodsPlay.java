@@ -38,8 +38,10 @@ public class VirtualMethodsPlay {
 		System.out.println("Starting main ");
 		
 		// Replace this call as needed
-		playWithVirtualBuilder();
-		
+//		playWithVirtualBuilder();
+//		playWithFactory();
+		playWithExecutorService();
+//		playWithVirtualExecutorService();
 		System.out.println("Ending main ");
 
 	}
