@@ -1,5 +1,6 @@
 package com.mudra;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -13,8 +14,10 @@ public class UserRequestHandler implements Callable<String> {
 
 	@Override
 	public String call() throws Exception {
-		return sequentialCall();
-		
+//		return sequentialCall();
+//		return concurrentCallWithFutures();
+//		return concurrentCallFunctional();
+		return concurrentCallCompletableFuture();
 	}
 
 	/**
@@ -69,7 +72,9 @@ public class UserRequestHandler implements Callable<String> {
 				})
 				.collect(Collectors.joining(","));
 			
-			return "[" + result + "]";
+			String output = "[" + result + "]";
+			System.out.println(output);
+			return output;
 			
 		}
 	}
@@ -109,6 +114,8 @@ public class UserRequestHandler implements Callable<String> {
 		
 		String result1 = dbCall(); // 2 secs
 		String result2 = restCall();  // 5 secs
+
+//		Thread.sleep(Duration.ofMinutes(10));
 		
 		String result = String.format("[%s,%s]", result1, result2);
 		

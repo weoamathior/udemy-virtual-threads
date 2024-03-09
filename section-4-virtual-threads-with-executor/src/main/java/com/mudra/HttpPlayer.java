@@ -24,10 +24,11 @@ public class HttpPlayer {
 	public static void main(String[] args) {
 		
 		ThreadFactory factory =  Thread.ofVirtual().name("request-handler-",0).factory();
+//		ThreadFactory factory =  Thread.ofPlatform().name("request-handler-",0).factory();
 		try (ExecutorService executor = Executors.newThreadPerTaskExecutor(factory)) {
 			
 			IntStream.range(0, NUM_USERS).forEach( j -> {
-				executor.submit(new UserRequestHandler());
+				executor.submit(new MyUserRequestHandler());
 			});
 			
 		}
