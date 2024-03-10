@@ -9,8 +9,7 @@ import java.util.concurrent.StructuredTaskScope;
 public class STaskSimpleExamples {
 
     public static void main(String[] args)throws Exception {
-        interruptMain();
-        exampleCompleteAllTasks();
+        shutdownWhenFirstChildFails();
     }
 
     private static void interruptMain() {
@@ -23,6 +22,22 @@ public class STaskSimpleExamples {
                 e.printStackTrace();
             }
         });
+    }
+
+    private static void shutdownWhenFirstChildFails() throws Exception {
+        try(var scope = new StructuredTaskScope.ShutdownOnFailure() ) {
+            LongRunningTask dataTask = new LongRunningTask("data-task", 3, "row1j", true);
+            LongRunningTask restTask = new LongRunningTask("rest-task", 10, "json1", false);
+            StructuredTaskScope.Subtask<LongRunningTask.TaskResponse> dataSubTask = scope.fork(dataTask);
+            StructuredTaskScope.Subtask<LongRunningTask.TaskResponse> restSubTask = scope.fork(restTask);
+
+            scope.join();
+            scope.throwIfFailed();
+
+            System.out.println(dataSubTask.get());
+            System.out.println(restSubTask.get());
+
+        }
     }
 
     private static void exampleCompleteAllTasks() throws Exception {
